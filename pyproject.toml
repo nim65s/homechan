@@ -10,6 +10,7 @@ python = "^3.10"
 channels = "^3.0.5"
 channels-redis = "^3.4.1"
 selenium = "^4.3.0"
+mqttasgi = "^1.0.2"
 
 [tool.poetry.dev-dependencies]
 ipython = "^8.4.0"
