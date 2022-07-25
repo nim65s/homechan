@@ -4,6 +4,8 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 from mqttasgi.consumers import MqttConsumer
 
+from matrixasgi.consumers import MatrixConsumer
+
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -12,12 +14,14 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
         await self.channel_layer.group_add(self.room_group_name, self.channel_name)
         await self.channel_layer.group_add("mqtt2chat", self.channel_name)
+        await self.channel_layer.group_add("matrix2chat", self.channel_name)
 
         await self.accept()
 
     async def disconnect(self, close_code):
         await self.channel_layer.group_discard(self.room_group_name, self.channel_name)
         await self.channel_layer.group_discard("mqtt2chat", self.channel_name)
+        await self.channel_layer.group_discard("matrix2chat", self.channel_name)
 
     async def receive(self, text_data):
         text_data_json = json.loads(text_data)
@@ -35,6 +39,11 @@ class ChatConsumer(AsyncWebsocketConsumer):
 
     async def mqtt_message(self, event):
         await self.send(text_data=json.dumps({"message": f"MQTT: {event['message']}"}))
+
+    async def matrix_message(self, event):
+        await self.send(
+            text_data=json.dumps({"message": f"Matrix: {event['message']}"})
+        )
 
 
 class ChatMqttConsumer(MqttConsumer):
@@ -59,3 +68,21 @@ class ChatMqttConsumer(MqttConsumer):
 
     async def chat_message(self, event):
         await self.publish("asgi", event["message"], qos=1, retain=False)
+
+
+class ChatMatrixConsumer(MatrixConsumer):
+    async def connect(self):
+        await self.channel_layer.group_add("chat2matrix")
+
+    async def disconnect(self, close_code):
+        await self.channel_layer.group_discard("chat2matrix")
+
+    async def receive(self, matrix_message):
+        print(f"ChatMatrixConsumer received {matrix_message=}")
+        self.channel_layer.group_send(
+            "matrix2chat",
+            {
+                "type": "matrix_message",
+                "message": matrix_message,
+            },
+        )

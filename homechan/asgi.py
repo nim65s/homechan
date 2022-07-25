@@ -28,5 +28,6 @@ application = ProtocolTypeRouter(
             AuthMiddlewareStack(URLRouter(chat.routing.websocket_urlpatterns))
         ),
         "mqtt": chat.consumers.ChatMqttConsumer.as_asgi(),
+        "matrix": chat.consumers.ChatMatrixConsumer.as_asgi(),
     }
 )
