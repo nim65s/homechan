@@ -37,6 +37,11 @@ services:
     image: redis:alpine
     restart: unless-stopped
 
+  mqtt:
+    build: .
+    restart: unless-stopped
+    command: mqttasgi -H ${MQTT_HOSTNAME} -U ${MQTT_USERNAME} -P ${MQTT_PASSWORD} homechan.asgi:application
+
 networks:
   web:
     external: true

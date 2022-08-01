@@ -28,10 +28,10 @@ class ChatConsumer(AsyncWebsocketConsumer):
         message = text_data_json["message"]
 
         await self.channel_layer.group_send(
-            self.room_group_name, {"type": "chat_message", "message": message}
+            self.room_group_name, {"type": "chat.message", "message": message}
         )
         await self.channel_layer.group_send(
-            "chat2mqtt", {"type": "chat_message", "message": message}
+            "chat2mqtt", {"type": "chat.message", "message": message}
         )
 
     async def chat_message(self, event):
@@ -57,7 +57,7 @@ class ChatMqttConsumer(MqttConsumer):
         await self.channel_layer.group_send(
             "mqtt2chat",
             {
-                "type": "mqtt_message",
+                "type": "mqtt.message",
                 "message": f"{topic=}: {payload=}",
             },
         )
@@ -78,11 +78,10 @@ class ChatMatrixConsumer(MatrixConsumer):
         await self.channel_layer.group_discard("chat2matrix")
 
     async def receive(self, matrix_message):
-        print(f"ChatMatrixConsumer received {matrix_message=}")
-        self.channel_layer.group_send(
+        await self.channel_layer.group_send(
             "matrix2chat",
             {
-                "type": "matrix_message",
+                "type": "matrix.message",
                 "message": matrix_message,
             },
         )
