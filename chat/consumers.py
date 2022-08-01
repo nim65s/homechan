@@ -74,6 +74,8 @@ class ChatMqttConsumer(MqttConsumer):
 
 
 class ChatMatrixConsumer(MatrixConsumer):
+    startswith = "!"
+
     async def connect(self):
         await self.channel_layer.group_add("chat2matrix", self.channel_name)
 
