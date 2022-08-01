@@ -40,7 +40,17 @@ services:
   mqtt:
     build: .
     restart: unless-stopped
+    env_file:
+      - .env.mqtt
     command: mqttasgi -H ${MQTT_HOSTNAME} -U ${MQTT_USERNAME} -P ${MQTT_PASSWORD} homechan.asgi:application
+
+  matrix:
+    image: nim65s/matrix-asgi
+    restart: unless-stopped
+    env_file:
+      - .env.matrix
+    command: homechan.asgi:application
+
 
 networks:
   web:

@@ -4,7 +4,7 @@ from channels.generic.websocket import AsyncWebsocketConsumer
 
 from mqttasgi.consumers import MqttConsumer
 
-from matrixasgi.consumers import MatrixConsumer
+from matrix_asgi.consumers import MatrixConsumer
 
 
 class ChatConsumer(AsyncWebsocketConsumer):
