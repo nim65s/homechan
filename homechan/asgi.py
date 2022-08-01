@@ -27,7 +27,7 @@ application = ProtocolTypeRouter(
         "websocket": AllowedHostsOriginValidator(
             AuthMiddlewareStack(URLRouter(chat.routing.websocket_urlpatterns))
         ),
-        "mqtt": chat.consumers.ChatMqttConsumer.as_asgi(),
-        "matrix": chat.consumers.ChatMatrixConsumer.as_asgi(),
+        "mqtt": chat.consumers.mqtt.ChatMqttConsumer.as_asgi(),
+        "matrix": chat.consumers.matrix.ChatMatrixConsumer.as_asgi(),
     }
 )

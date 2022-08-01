@@ -2,10 +2,6 @@ import json
 
 from channels.generic.websocket import AsyncWebsocketConsumer
 
-from mqttasgi.consumers import MqttConsumer
-
-from matrix_asgi.consumers import MatrixConsumer
-
 
 class ChatConsumer(AsyncWebsocketConsumer):
     async def connect(self):
@@ -47,49 +43,3 @@ class ChatConsumer(AsyncWebsocketConsumer):
         await self.send(
             text_data=json.dumps({"message": f"Matrix: {event['message']}"})
         )
-
-
-class ChatMqttConsumer(MqttConsumer):
-    async def connect(self):
-        await self.subscribe("tele/+/SENSOR", 1)
-        await self.channel_layer.group_add("chat2mqtt", self.channel_name)
-
-    async def receive(self, mqtt_message):
-        topic = mqtt_message["topic"]
-        payload = mqtt_message["payload"].decode()
-        await self.channel_layer.group_send(
-            "mqtt2chat",
-            {
-                "type": "mqtt.message",
-                "message": f"{topic=}: {payload=}",
-            },
-        )
-
-    async def disconnect(self):
-        await self.unsubscribe("tele/+/SENSOR")
-        await self.channel_layer.group_discard("chat2mqtt", self.channel_name)
-
-    async def chat_message(self, event):
-        await self.publish("asgi", event["message"], qos=1, retain=False)
-
-
-class ChatMatrixConsumer(MatrixConsumer):
-    startswith = "!"
-
-    async def connect(self):
-        await self.channel_layer.group_add("chat2matrix", self.channel_name)
-
-    async def disconnect(self, close_code):
-        await self.channel_layer.group_discard("chat2matrix", self.channel_name)
-
-    async def receive(self, matrix_message):
-        await self.channel_layer.group_send(
-            "matrix2chat",
-            {
-                "type": "matrix.message",
-                "message": matrix_message,
-            },
-        )
-
-    async def chat_message(self, message):
-        await self.matrix_send("!PBcCHCjiPyGbThYAyQ:aen.im", message["message"])

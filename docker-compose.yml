@@ -38,11 +38,13 @@ services:
     restart: unless-stopped
 
   mqtt:
-    build: .
+    image: nim65s/mqttasgi
     restart: unless-stopped
     env_file:
       - .env.mqtt
-    command: mqttasgi -H ${MQTT_HOSTNAME} -U ${MQTT_USERNAME} -P ${MQTT_PASSWORD} homechan.asgi:application
+    command: homechan.asgi:application
+    volumes:
+      - .:/app
 
   matrix:
     image: nim65s/matrix-asgi
@@ -50,6 +52,8 @@ services:
     env_file:
       - .env.matrix
     command: homechan.asgi:application
+    volumes:
+      - .:/app
 
 
 networks:
