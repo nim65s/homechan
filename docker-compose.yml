@@ -3,14 +3,12 @@ version: '3'
 services:
   postgres:
     image: postgres:14-alpine
-    restart: unless-stopped
     env_file:
       - .env
     volumes:
       - "${CHATONS_ROOT_DIR:-/srv/chatons}/homechan/sql:/var/lib/postgresql/data"
   app:
     image: nim65s/homechan
-    restart: unless-stopped
     volumes:
       - "${CHATONS_ROOT_DIR:-/srv/chatons}/homechan/srv:/srv"
     env_file:
@@ -25,7 +23,6 @@ services:
       traefik.http.routers.homechan-app.rule: "Host(`homechan.${DOMAIN_NAME:-localhost}`)"
   nginx:
     image: nim65s/ndh:nginx
-    restart: unless-stopped
     volumes:
       - "${CHATONS_ROOT_DIR:-/srv/chatons}/homechan/srv/homechan:/srv:ro"
     networks:
@@ -35,20 +32,19 @@ services:
       traefik.http.routers.homechan-ngx.rule: "Host(`homechan.${DOMAIN_NAME:-localhost}`) && PathPrefix(`/static`, `/media`)"
   redis:
     image: redis:alpine
-    restart: unless-stopped
 
   mqtt:
     image: nim65s/homechan
-    restart: unless-stopped
     env_file:
       - .env
     command: mqttasgi homechan.asgi:application
 
   matrix:
     image: nim65s/homechan
-    restart: unless-stopped
     env_file:
       - .env
+    environment:
+      PYTHONPATH: .
     command: matrix-asgi homechan.asgi:application
 
 
