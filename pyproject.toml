@@ -11,7 +11,7 @@ channels = "^3.0.5"
 channels-redis = "^3.4.1"
 selenium = "^4.3.0"
 mqttasgi = {git = "https://git@github.com/nim65s/mqttasgi.git", rev = "master"}
-matrix-asgi = {git = "https://git@github.com/nim65s/matrix-asgi.git", rev = "main"}
+matrix-asgi = "^0.2.3"
 
 [tool.poetry.dev-dependencies]
 ipython = "^8.4.0"

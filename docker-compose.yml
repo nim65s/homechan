@@ -9,7 +9,7 @@ services:
     volumes:
       - "${CHATONS_ROOT_DIR:-/srv/chatons}/homechan/sql:/var/lib/postgresql/data"
   app:
-    build: .
+    image: nim65s/homechan
     restart: unless-stopped
     volumes:
       - "${CHATONS_ROOT_DIR:-/srv/chatons}/homechan/srv:/srv"
@@ -38,14 +38,14 @@ services:
     restart: unless-stopped
 
   mqtt:
-    build: .
+    image: nim65s/homechan
     restart: unless-stopped
     env_file:
       - .env
     command: mqttasgi homechan.asgi:application
 
   matrix:
-    build: .
+    image: nim65s/homechan
     restart: unless-stopped
     env_file:
       - .env
