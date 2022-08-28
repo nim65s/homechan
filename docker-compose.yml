@@ -8,7 +8,7 @@ services:
     volumes:
       - "${CHATONS_ROOT_DIR:-/srv/chatons}/homechan/sql:/var/lib/postgresql/data"
   app:
-    image: nim65s/homechan
+    build: .
     volumes:
       - "${CHATONS_ROOT_DIR:-/srv/chatons}/homechan/srv:/srv"
     env_file:
@@ -34,13 +34,13 @@ services:
     image: redis:alpine
 
   mqtt:
-    image: nim65s/homechan
+    build: .
     env_file:
       - .env
     command: mqttasgi homechan.asgi:application
 
   matrix:
-    image: nim65s/homechan
+    build: .
     env_file:
       - .env
     environment:
