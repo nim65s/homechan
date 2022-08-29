@@ -14,7 +14,7 @@ services:
     env_file:
       - .env
     environment:
-      - DB=postgres
+      DB: postgres
     networks:
       - web
       - default
@@ -37,6 +37,8 @@ services:
     build: .
     env_file:
       - .env
+    environment:
+      DB: postgres
     command: mqttasgi homechan.asgi:application
 
   matrix:
@@ -44,6 +46,7 @@ services:
     env_file:
       - .env
     environment:
+      DB: postgres
       PYTHONPATH: .
     command: matrix-asgi homechan.asgi:application
 
