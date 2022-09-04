@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "channels",
     "chat",
-    "tasmot",
+    "tasmota",
 ]
 
 MIDDLEWARE = [

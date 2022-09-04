@@ -22,6 +22,7 @@ repos:
     rev: v1.0.0
     hooks:
     -   id: check-gitlab-ci
+<<<<<<< HEAD
 -   repo: https://github.com/pre-commit/mirrors-mypy
     rev: v0.971
     hooks:
@@ -34,7 +35,7 @@ repos:
         -   types-setuptools
         -   ndh
 -   repo: https://github.com/psf/black
-    rev: 22.6.0
+    rev: 22.8.0
     hooks:
     -   id: black
 -   repo: https://github.com/asottile/pyupgrade

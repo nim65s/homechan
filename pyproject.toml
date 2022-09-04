@@ -12,8 +12,6 @@ channels-redis = "^3.4.1"
 selenium = "^4.3.0"
 matrix-asgi = "^1.0.0"
 mqttasgi = {git = "https://git@github.com/nim65s/mqttasgi.git", rev = "master"}
-
-[tool.poetry.dev-dependencies]
 ipython = "^8.4.0"
 
 [build-system]
